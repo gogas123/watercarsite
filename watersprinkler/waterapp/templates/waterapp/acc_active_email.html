@@ -1,0 +1,9 @@
+
+
+{% load i18n %}{% autoescape off %}
+{% blocktrans %}
+{{user.username}}님, 아래 랭크를 클릭해서 계정을 활성호하세요:
+{% endblocktrans %}
+
+http://{{ domain }}{% url 'waterapp:activate' uidb64=uid token=token %}
+{% endautoescape %}

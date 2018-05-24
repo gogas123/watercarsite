@@ -137,3 +137,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, './uploads')
 # Summernote
 SUMMERNOTE_CONFIG = {
 }
+
+ACCOUNT_ACTIVATION_DAYS = 1
+REGISTRATION_OPEN = True # 기본값
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'whan6322@gmail.com'
+EMAIL_HOST_PASSWORD = 'judo5804'
+SERVER_EMAIL = 'whan6322@gmail.com'
+DEFULT_FROM_MAIL = 'whan6322'

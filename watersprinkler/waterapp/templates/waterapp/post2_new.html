@@ -9,7 +9,7 @@
   <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>금수강산</title>
+  <title>금수강산(용수공급 도로살수)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Free HTML5 Website Template by gettemplates.co" />
   <meta name="keywords" content="free website templates, free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive" />
@@ -69,10 +69,13 @@
             <ul>
               <li><a href="/introduce">회사 소개</a></li>
               <li><a href="/about">주요 업무</a></li>
-              <li><a href="/services">보유 차량</a></li>
+              <li><a href='{% url "waterapp:services"%}'>현장 갤러리</a></li>
+              {% if user.is_authenticated %}
               <li><a href='{% url "waterapp:post_list"%}'>구인. 구직</a></li>
               <li><a href='{% url "waterapp:post1_list"%}'>팝니다. 삽니다</a></li>
               <liclass="active"><a href='{% url "waterapp:post2_list"%}'>블랙리스트</a></li>
+              {% else %}
+              {% endif %}
             </ul>
           </div>
         </div>

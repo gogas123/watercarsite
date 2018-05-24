@@ -9,7 +9,7 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>금수강산</title>
+	<title>금수강산(용수공급 도로살수)</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Website Template by gettemplates.co" />
 	<meta name="keywords" content="free website templates, free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive" />
@@ -69,7 +69,7 @@
 						<ul>
 							<li><a href="/introduce">회사 소개</a></li>
 							<li ><a href="/about">주요 업무</a></li>
-							<li class = "active"><a href="/services">보유 차량</a></li>
+							<li class = "active"><a href='{% url "waterapp:services"%}'>현장 갤러리</a></li>
 
 							{% if user.is_authenticated %}
        						<li><a href='{% url "waterapp:post_list"%}'>구인. 구직</a></li>
@@ -91,186 +91,63 @@
         <a href="{% url 'login' %}">로그인</a> / <a href="{% url 'waterapp:signup' %}">회원가입</a>
       {% endif %}
    
-	</div>
-		
+</div>
 
 		<div class="gtco-section gtco-services">
 			<div class="gtco-container">
 				<div class="row gtco-heading">
 					<div class="col-md-7 text-left">
-						<h2>Our Services</h2>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat enim et urna sagittis, rhoncus euismod erat tincidunt. Donec tincidunt volutpat erat.</p>
+						<h2>현장 갤러리</h2>
+						<p>금강산수의 차량들이 활약하는 현장의 사진입니다.</p>
 					</div>
-					<div class="col-md-3 col-md-push-2 text-center">
-						<p class="mt-md"><a href="#" class="btn btn-special btn-block">Join our team</a></p>
-					</div>
+
 				</div>
+				
 				<div class="row">
+					{% for post in object_list %}
 					<div class="col-md-4 col-sm-6 col-xs-12">
-						<div class="feature-left">
-							<i class="ti-briefcase icon"></i>
+						<div>
+						
 							<div class="copy">
-								<h3>Building &amp; Architect</h3>
-								<p>Lorem ipsum dolor sit ameteista, consectetur adipiscing is not elitistaris.</p>
-								<p><a href="#" class="gtco-more">Learn more</a></p>
+								<img src="{{ post.photo.url }}" alt=""  style="margin-left: 50px; position:absoulte; width:250px;height:300px">
 							</div>
+							
 						</div>
-					</div>
-					<div class="col-md-4 col-sm-6 col-xs-12">
-						<div class="feature-left">
-							<i class="ti-package icon"></i>
-							<div class="copy">
-								<h3>Planning</h3>
-								<p>Lorem ipsum dolor sit ameteista, consectetur adipiscing is not elitistaris.</p>
-								<p><a href="#" class="gtco-more">Learn more</a></p>
-							</div>
-						</div>
-					</div>
-					
-					<div class="clearfix visible-sm-block"></div>
-
-					<div class="col-md-4 col-sm-6 col-xs-12">
-						<div class="feature-left">
-							<i class="ti-brush-alt icon"></i>
-							<div class="copy">
-								<h3>Interior Design</h3>
-								<p>Lorem ipsum dolor sit ameteista, consectetur adipiscing is not elitistaris.</p>
-								<p><a href="#" class="gtco-more">Learn more</a></p>
-							</div>
-						</div>
-					</div>
-					
-					<div class="clearfix visible-md-block"></div>
-
-					<div class="col-md-4 col-sm-6 col-xs-12">
-						<div class="feature-left">
-							<i class="ti-home icon"></i>
-							<div class="copy">
-								<h3>Sustainability</h3>
-								<p>Lorem ipsum dolor sit ameteista, consectetur adipiscing is not elitistaris.</p>
-								<p><a href="#" class="gtco-more">Learn more</a></p>
-							</div>
-						</div>
+						<br>
+						<h4 style="text-align:center;">{{ post.title }}</h4>
+						<hr>
 					</div>
 
-					<div class="clearfix visible-sm-block"></div>
-
-					<div class="col-md-4 col-sm-6 col-xs-12">
-						<div class="feature-left">
-							<i class="ti-notepad icon"></i>
-							<div class="copy">
-								<h3>Events</h3>
-								<p>Lorem ipsum dolor sit ameteista, consectetur adipiscing is not elitistaris.</p>
-								<p><a href="#" class="gtco-more">Learn more</a></p>
-							</div>
-						</div>
-					</div>
-
-
-					<div class="col-md-4 col-sm-6 col-xs-12">
-						<div class="feature-left">
-							<i class="ti-plug icon"></i>
-							<div class="copy">
-								<h3>Bridge</h3>
-								<p>Lorem ipsum dolor sit ameteista, consectetur adipiscing is not elitistaris.</p>
-								<p><a href="#" class="gtco-more">Learn more</a></p>
-							</div>
-						</div>
-					</div>
-					
-					
-
+					{% endfor %}
 				</div>
 			</div>
 		</div>
-		<!-- Services -->
+		{% if is_paginated %}
 
-		<div class="gtco-section">
-			<div class="gtco-container">
-				<div class="row">
-					<div class="col-md-6 gtco-news">
-						<h2>News</h2>	
-						<ul>
-							<li>
-								<a href="#">
-									<span class="post-date">September 10, 2016</span>
-									<h3>Manila Bridge Re-construction</h3>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat enim et urna sagittis, rhoncus euismod...</p>
-								</a>
-							</li>
+<div class="text-center pagination-wrap">
+	<ul class="pagination">
+	  {% if page_obj.has_previous %}
+	    <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+	  {% else %}
+	    <li class="disabled"><span>&laquo;</span></li>
+	  {% endif %}
+	  {% for i in paginator.page_range %}
+	    {% if page_obj.number == i %}
+	      <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+	    {% else %}
+	      <li><a href="?page={{ i }}">{{ i }}</a></li>
+	    {% endif %}
+	  {% endfor %}
+	  {% if page_obj.has_next %}
+	    <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+	  {% else %}
+	    <li class="disabled"><span>&raquo;</span></li>
+	  {% endif %}
+	</ul>
+</div>
 
-							<li>
-								<a href="#">
-									<span class="post-date">September 10, 2016</span>
-									<h3>Manila Bridge Re-construction</h3>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat enim et urna sagittis, rhoncus euismod...</p>
-								</a>
-							</li>
-
-							<li>
-								<a href="#">
-									<span class="post-date">September 10, 2016</span>
-									<h3>Manila Bridge Re-construction</h3>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat enim et urna sagittis, rhoncus euismod...</p>
-								</a>
-							</li>
-						</ul>
-						<p><a href="#" class="btn btn-sm btn-special">More News</a></p>
-					</div>
-					<!-- END News -->
-					<div class="col-md-5 col-md-push-1 gtco-testimonials">
-						<h2>Testimonials</h2>
-						<blockquote>
-							<p>&ldquo;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat enim et urna sagittis, rhoncus euismod erat tincidunt. Donec tincidunt volutpat erat.&ldquo;</p>
-							<p class="author"><cite>&mdash; John Doe Dueller</cite></p>
-						</blockquote>
-						<blockquote>
-							<p>&ldquo;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat enim et urna sagittis, rhoncus euismod erat tincidunt. Donec tincidunt volutpat erat.&ldquo;</p>
-							<p class="author"><cite>&mdash; John Doe Dueller</cite></p>
-						</blockquote>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- END  -->
-
-		<div class="gtco-section gto-features">
-			<div class="gtco-container">
-				<div class="row">
-					<div class="col-md-4">
-						<div class="feature-left">
-							<i class="ti-zip icon"></i>
-							<div class="copy">
-								<h3>Architect</h3>
-								<p>Lorem ipsum dolor sit ameteista, consectetur adipiscing is not elitistaris.</p>
-								<p><a href="#" class="gtco-more">Learn more</a></p>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="feature-left">
-							<i class="ti-hummer icon"></i>
-							<div class="copy">
-								<h3>Planning</h3>
-								<p>Lorem ipsum dolor sit ameteista, consectetur adipiscing is not elitistaris.</p>
-								<p><a href="#" class="gtco-more">Learn more</a></p>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="feature-left">
-							<i class="ti-plug icon"></i>
-							<div class="copy">
-								<h3>Parks &amp; Events</h3>
-								<p>Lorem ipsum dolor sit ameteista, consectetur adipiscing is not elitistaris.</p>
-								<p><a href="#" class="gtco-more">Learn more</a></p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
+{% endif %}
+		
 		<footer id="gtco-footer" class="gtco-section" role="contentinfo">
 			<div class="gtco-container">
 				<div class="row row-pb-md">

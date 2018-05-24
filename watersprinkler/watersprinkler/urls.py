@@ -24,7 +24,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('waterapp.urls')),
     path('summernote/', include('django_summernote.urls')),
-    path('accounts/signup/', waterapp_views.signup, name='signup'),
 ]
 
 

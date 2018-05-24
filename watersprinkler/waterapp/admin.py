@@ -1,3 +1,6 @@
 from django.contrib import admin
+from waterapp.models import Constructionpost
 
-# Register your models here.
+
+admin.site.register(Constructionpost) # 기본 ModelAdmin으로 등록
+

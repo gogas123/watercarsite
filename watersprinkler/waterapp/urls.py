@@ -1,23 +1,18 @@
 from django.urls import path, include
 from . import views
 from django.contrib.auth import views as auth_views
-
+from django.conf.urls import url
 
 app_name = 'waterapp'
 
 urlpatterns = [
 	path('', views.index, name = 'index'),
 	path('about', views.about),
-	path('contact', views.contact),
-	path('portfolio', views.portfolio),
-	path('services', views.services),
+	path('services', views.services.as_view(), name = 'services'),
 	path('introduce', views.introduce),
-	path('post', views.post),
-	path('loginpage', views.loginpage),
-	path('blacklist', views.blacklist),
 	path('login/', auth_views.login, {'template_name': 'waterapp/login.html'}, name='login'),
     path('logout/', auth_views.logout, {'next_page': 'login'}, name='logout'),
-    path('signup/', views.signup, name='signup'),
+    path('accounts/signup/', views.signup.as_view(), name='signup'),
   	path('post_list', views.postLV.as_view(), name='post_list'),
     path(r'post/(<pk>\d+)/', views.post_detail, name='post_detail'),
     path(r'post/new/', views.post_new, name='post_new'),
@@ -39,5 +34,5 @@ urlpatterns = [
     path(r'post2/(<pk>\d+)/remove/', views.post2_remove, name='post2_remove'),
     path(r'comment2/(<pk>\d+)/remove/', views.comment2_remove, name='comment2_remove'),
     path(r'comment2/(<pk>\d+)/edit/', views.comment2_edit, name='comment2_edit'),
-
+    path(r'activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/', views.activate, name = 'activate'),
 ]
