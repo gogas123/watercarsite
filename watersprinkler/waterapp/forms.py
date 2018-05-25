@@ -90,12 +90,22 @@ class CreateUserForm(UserCreationForm):
         widget = forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '같은 비밀번호를 다시 입력해주세요.'}),
         )
     use = forms.BooleanField(
+        required=False,
+        initial=True,
+        label = '',
+        widget = forms.HiddenInput()
         )
     infor = forms.BooleanField(
+        required=False,
+        initial=True,
+        label = '',
+        widget = forms.HiddenInput()
         )
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('username', 'email', 'password1', 'password2', 'use', 'infor')
         widgets = {
             'username' : forms.TextInput(attrs={'class': 'form-control', 'help_text': ''}),
+            'use' : forms.HiddenInput(),
+            'infor' : forms.HiddenInput(),
         }

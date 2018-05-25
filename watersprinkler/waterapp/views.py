@@ -54,6 +54,8 @@ def agree(request):
     return render(request, 'waterapp/agree.html', {'toss':toss})
 
 class signup(View):
+
+
     def get(self, request):
         if request.user.is_authenticated:
             return redirect("waterapp:index")
@@ -61,9 +63,9 @@ class signup(View):
         return render(request, 'waterapp/signup.html', {'form':form})
 
     def post(self, request):
+
         form = CreateUserForm(request.POST)
         if form.is_valid():
-
             user = form.save(commit=False)
             user.is_active = False
             user.save()

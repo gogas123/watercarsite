@@ -86,6 +86,7 @@
 <div style="padding: 170px">
 
  <h2>회원 가입</h2>
+ 
   <form method="post" action = '{% url "waterapp:signup" %}'>
    
     {% for field in form %}
@@ -100,8 +101,9 @@
         {% for error in field.errors %}
           <p style="color: red">{{ error }}</p>
         {% endfor %}
+        {{field.use.as_hidden}}
+        {{field.infor.as_hidden}}
       </p>
-
     {% endfor %}
 
     <button class = "btn" type="submit">회원가입</button>
