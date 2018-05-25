@@ -10,6 +10,7 @@ urlpatterns = [
 	path('about', views.about),
 	path('services', views.services.as_view(), name = 'services'),
 	path('introduce', views.introduce),
+    path('agree', views.agree, name = 'agree'),
 	path('login/', auth_views.login, {'template_name': 'waterapp/login.html'}, name='login'),
     path('logout/', auth_views.logout, {'next_page': 'login'}, name='logout'),
     path('accounts/signup/', views.signup.as_view(), name='signup'),

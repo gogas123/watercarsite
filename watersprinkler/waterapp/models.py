@@ -112,3 +112,9 @@ class Comment2(models.Model):
 
     def __str__(self):
         return self.text
+
+
+
+class TOS(models.Model):
+    use = models.TextField()
+    infor = models.TextField()

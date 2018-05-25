@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.views.generic import ListView
-from .models import Post, Comment, Post1, Comment1, Post2, Comment2, Constructionpost
+from .models import Post, Comment, Post1, Comment1, Post2, Comment2, Constructionpost, TOS
 from .forms import PostForm, CommentForm, CreateUserForm, Post1Form, Comment1Form, Post2Form, Comment2Form
 from django.http import HttpResponse
 from django.views import View
@@ -47,6 +47,11 @@ def introduce(request):
 def post(request):
 	return render(request, 'waterapp/post.html')
 
+
+def agree(request):
+    toss = TOS.objects.all()
+
+    return render(request, 'waterapp/agree.html', {'toss':toss})
 
 class signup(View):
     def get(self, request):
@@ -406,6 +411,9 @@ def activate(request, uidb64, token):
         return HttpResponse('Activation link is invalid!')
 
 
+def agree(request):
+    toss = TOS.objects.all()
 
+    return render(request, 'waterapp/agree.html', {'toss':toss})
 
 

@@ -89,6 +89,7 @@
   <form method="post" action = '{% url "waterapp:signup" %}'>
    
     {% for field in form %}
+   
     {% csrf_token %}
       <p>
         {{ field.label_tag }}<br>
@@ -100,9 +101,10 @@
           <p style="color: red">{{ error }}</p>
         {% endfor %}
       </p>
+
     {% endfor %}
 
-    <button type="submit">회원가입</button>
+    <button class = "btn" type="submit">회원가입</button>
   </form>
 </div>
     <footer id="gtco-footer" class="gtco-section" role="contentinfo">
