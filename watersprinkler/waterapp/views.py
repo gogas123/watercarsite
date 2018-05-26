@@ -1,14 +1,14 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate, update_session_auth_hash
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.views.generic import ListView
 from .models import Post, Comment, Post1, Comment1, Post2, Comment2, Constructionpost, TOS
 from .forms import PostForm, CommentForm, CreateUserForm, Post1Form, Comment1Form, Post2Form, Comment2Form
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views import View
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -18,6 +18,8 @@ from django.core.mail import mail_managers, send_mail,EmailMessage
 from .tokens import account_activation_token
 from django.utils.encoding import force_bytes, force_text
 from django.conf import settings
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib import messages
 
 def index(request):
 	return render(request, 'waterapp/index.html')
@@ -410,7 +412,7 @@ def activate(request, uidb64, token):
         login(request, user)
         return redirect("waterapp:index")
     else:
-        return HttpResponse('Activation link is invalid!')
+        return HttpResponse('작성하신 이메일의 메일함을 확인해주세요')
 
 
 def agree(request):
@@ -418,4 +420,33 @@ def agree(request):
 
     return render(request, 'waterapp/agree.html', {'toss':toss})
 
+class DuplicationCheck(View):
+    def post(self, request):
+        # user = get_object_or_404(User, username=username)
+        username = request.POST.get('username', None)
+        data = {
+            'is_taken': User.objects.filter(username__iexact=username).exists()
+            }
+        return JsonResponse(data)
 
+
+def password_reset(request):
+    return render(request, 'registration/password_reset_form.html')
+
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, ('비밀번호가 성공적으로 변경되었습니다.'))
+            return redirect('waterapp:index')
+        else:
+            messages.error(request, ('Please correct the error below.'))
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'registration/password_change.html', {
+        'form': form
+    })

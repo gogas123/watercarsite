@@ -118,3 +118,6 @@ class Comment2(models.Model):
 class TOS(models.Model):
     use = models.TextField()
     infor = models.TextField()
+
+
+

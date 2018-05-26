@@ -36,4 +36,10 @@ urlpatterns = [
     path(r'comment2/(<pk>\d+)/remove/', views.comment2_remove, name='comment2_remove'),
     path(r'comment2/(<pk>\d+)/edit/', views.comment2_edit, name='comment2_edit'),
     path(r'activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/', views.activate, name = 'activate'),
+    path(r'duplcheck', views.DuplicationCheck.as_view(), name='duplcheck'),
+    path(r'password/', views.change_password, name='change_password'),
+    path(r'password_reset/', auth_views.password_reset,{'template_name': 'waterapp/password_reset_form.html'} ,name='password_reset'),
+    path(r'password_reset/done/',  auth_views.password_reset_done,{'template_name': 'waterapp/password_reset_done.html'},name='password_reset_done'),
+    path(r'reset/<uidb64>/<token>/', auth_views.password_reset_confirm,{'template_name': 'waterapp/password_reset_confirm.html'} ,name='password_reset_confirm'),
+    path(r'reset/done/',auth_views.password_reset_complete,{'template_name': 'waterapp/password_reset_complete.html'} , name='password_reset_complete')
 ]

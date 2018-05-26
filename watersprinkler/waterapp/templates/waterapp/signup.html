@@ -27,7 +27,9 @@
   <meta name="twitter:card" content="" />
 
   <link href="https://fonts.googleapis.com/css?family=Merriweather:300,400|Montserrat:400,700" rel="stylesheet">
-  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  <script src="{% static 'js/jquery-3.1.1.min.js'%} "></script>
 <!-- Animate.css -->
   <link rel='{% static "stylesheet" href="css/animate.css" %}'>
   <!-- Icomoon Icon Fonts-->
@@ -46,10 +48,153 @@
 
   <!-- Modernizr JS -->
   <script src='{% static "js/modernizr-2.6.2.min.js"%} '></script>
+  <script src="{% static 'js/join.js'%} "></script>
   <!-- FOR IE9 below -->
   <!--[if lt IE 9]>
   <script src="js/respond.min.js"></script>
   <![endif]-->
+  <style type="text/css">
+    .form-control1{ 
+  width: 30%;
+  height: 55px;
+  padding: 10px 20px;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #555555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;"
+
+    }
+
+  </style>
+  <script language="javascript">
+function check_jumin() { 
+ var jumin=document.getElementById('jumin1').value+document.getElementById('jumin2').value;
+
+ //주민등록 번호 13자리를 검사한다.
+  var fmt = /^\d{6}[1234]\d{6}$/;  //포멧 설정
+  if (!fmt.test(jumin)) {
+   return false;
+  }
+
+  // 생년월일 검사
+  var birthYear = (jumin.charAt(6) <= "2") ? "19" : "20";
+  birthYear += jumin.substr(0, 2);
+  var birthMonth = jumin.substr(2, 2) - 1;
+  var birthDate = jumin.substr(4, 2);
+  var birth = new Date(birthYear, birthMonth, birthDate);
+
+  if ( birth.getYear() % 100 != jumin.substr(0, 2) ||
+       birth.getMonth() != birthMonth ||
+       birth.getDate() != birthDate) {
+     return false;
+  }
+
+  // Check Sum 코드의 유효성 검사
+  var buf = new Array(13);
+  for (var i = 0; i < 13; i++) buf[i] = parseInt(jumin.charAt(i));
+ 
+  multipliers = [2,3,4,5,6,7,8,9,2,3,4,5];
+  for (var sum = 0, i = 0; i < 12; i++) sum += (buf[i] *= multipliers[i]);
+
+  if ((11 - (sum % 11)) % 10 != buf[12]) {
+     return false;
+  }
+
+  
+  return true;
+}
+
+function checks(){
+ if(check_jumin())
+ {
+  var input_name =document.getElementById('username').value;
+  var input_password=document.getElementById('password1').value;
+  var input_confirm_passowrd=document.getElementById('password2').value;
+  var input_email=document.getElementById('email').value;  
+    if(input_name == ""&& input_password == "" && input_email == ""){
+      alert("이름,이메일, 패스워드를 입력해주세요 "); return false;
+    }else if(input_name == "" && input_email == ""){
+      alert("이름과 이메일을 입력해주세요"); return false;
+    }else if(input_name == "" && input_password==""){
+      alert("이름과 패스워드를 입력해주세요"); return false;
+    }else if(input_password == ""&& input_email == ""){
+      alert("패스워드와 이메일을 입력해주세요"); return false;
+    }else if(input_name == ""){
+      alert("이름을 입력해주세요 "); return false;
+    }else if(input_email==""){
+      alert("이메일을 입력해주세요"); return false;
+    }else if(input_password==""){
+      alert("패스워드를 입력해주세요"); return false;
+    }else if(input_password != input_confirm_passowrd){
+      alert("입력한 비밀번호가 서로 다릅니다."); 
+      document.join.password1.focus();
+      return false;
+    }
+ }
+ else{//올바른 갑이 들어오지 않았을 때 실행될 코드
+  alert("올바르지 않은 주민번호 방식입니다.");
+  document.join.jumin1.focus();
+  return false;
+  }
+  
+   
+}
+
+//앞의 텍스트박스에 6자리 글씨가 써지면 자동으로 다음 칸으로 커서가 넘어간다.
+function nextgo(e){  
+  if (e.value.length>=6) {
+   document.getElementById('jumin2').focus();
+  }
+}
+$(function(){
+  var flag = false;
+  $("#duplcheck").on("click",function(){
+    $.ajax({
+      url: "/duplcheck",
+      type: 'POST',
+      data: {
+            "csrfmiddlewaretoken": jQuery("[name=csrfmiddlewaretoken]").val(),
+            'username': $("#username").val()
+      },
+      dataType: 'json',
+      success: function (data) {
+          // TODO: do something.
+          if (data.is_taken) {
+            alert("이미 존재하는 ID입니다.");
+          }
+          else{
+            alert("사용하실 수 있는 ID입니다.");
+            flag = true;
+          }
+      },
+      error: function (request, status, error) {
+          alert("code: " + request.status + "\n" + "error:" + error);
+      }
+    });
+    return false;
+  });
+  $("#username").on("focusout",function(){
+    if(flag){
+      flag=false;
+    }
+  });
+  $('#signup').on('submit',function(e){
+    if(!flag){
+      e.preventDefault();
+      alert("ID 중복확인 해주세요.");
+    }
+  });
+});
+</script>
+
   </head>
   <body>
     
@@ -86,76 +231,73 @@
 <div style="padding: 170px">
 
  <h2>회원 가입</h2>
- 
-  <form method="post" action = '{% url "waterapp:signup" %}'>
+
+  <form id="signup" method="post" action = '{% url "waterapp:signup" %}' onSubmit="return checks()">
    
-    {% for field in form %}
    
     {% csrf_token %}
       <p>
-        {{ field.label_tag }}<br>
-        {{ field }}
-        {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text }}</small>
-        {% endif %}
-        {% for error in field.errors %}
-          <p style="color: red">{{ error }}</p>
-        {% endfor %}
-        {{field.use.as_hidden}}
-        {{field.infor.as_hidden}}
+         <div class="form-group">
+            <label for="{{ form.name.id_for_label }}">이름 :</label><br>
+            <input class="form-control1" id="name" name="name" type="text" />
+          </div>
+         <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">아이디 :</label><br> 
+            <input class="form-control1" id="username" name="username" type="text" /> <button type="button" id="duplcheck" class="btn btn-default">중복확인</button><br>
+          </div>
+          <div class="form-group">
+            <label for="{{ form.password1.id_for_label }}">비밀번호 :</label><br>
+            <input class="form-control1" id="password1" name="password1" type="password" />
+          </div>
+          <div class="form-group">
+            <label for="{{ form.password2.id_for_label }}">비밀번호 확인 :</label><br>
+            <input class="form-control1" id="password1" name="password2" type="password" />
+          </div>
+          <div class="form-group">
+            <label for="{{ form.password2.id_for_label }}">이메일 :</label><br>
+            <input class="form-control1" id="email" name="email" type="email" />
+          </div>
       </p>
-    {% endfor %}
+      
 
-    <button class = "btn" type="submit">회원가입</button>
+    주민등록번호 :<br>
+         <input style="width: 30%" class = "form-control1" type="text" id = "jumin1" name="jumin1" onkeyup="nextgo(this);"/> - <input style="width: 30%" class = "form-control1" type="password" id = "jumin2" name="jumin2">
+            <br>
+            <br>
+            휴대전화 :<br>
+                <p>
+                    <select style="width: 10%" class = "form-control1" name="PhoneNo">
+                        <option value="010">010</option>
+                        <option value="017">017</option>
+                        <option value="017">011</option>
+                    </select>
+                    - 
+                    <input style="width: 10%" class = "form-control1" type="text" name="PhoneNo1" size="4" />
+                    -
+                    <input style="width: 10%" class = "form-control1" type="text" name="PhoneNo2" size="4" />
+                </p>
+            <br>
+    <button id="submit" class = "btn" type="submit">회원가입</button>
+
   </form>
 </div>
     <footer id="gtco-footer" class="gtco-section" role="contentinfo">
       <div class="gtco-container">
         <div class="row row-pb-md">
           <div class="col-md-4 gtco-widget gtco-footer-paragraph">
-            <h3>금수강산</h3>
-            <p>저희 "금수강산"은 보유 차량 10대로 언제 어느 현장이든지 달려 최선을 다하겠습니다.</p>
+            <h2 style="color: white">금수강산</h2>
+            
           </div>
-          <div class="col-md-4">
-            <div class="row">
-              <div class="col-md-6 gtco-footer-link">
-                <h3>Links</h3>
-                <ul class="gtco-list-link">
-                  <li><a href="#">Home</a></li>
-                  <li><a href="#">Features</a></li>
-                  <li><a href="#">Products</a></li>
-                  <li><a href="#">Testimonial</a></li>
-                  <li><a href="#">Contact</a></li>
-                </ul>
-              </div>
-              <div class="col-md-6 gtco-footer-link">
-                <h3>Work</h3>
-                <ul class="gtco-list-link">
-                  <li><a href="#">New York Arena</a></li>
-                  <li><a href="#">Eagle Park</a></li>
-                  <li><a href="#">Nationals Park</a></li>
-                  <li><a href="#">Manila Park</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 gtco-footer-subscribe">
-            <form class="form-inline">
-              <div class="form-group">
-                <label class="sr-only" for="exampleInputEmail3">Email address</label>
-                <input type="email" class="form-control" id="" placeholder="Email">
-              </div>
-              <button type="submit" class="btn btn-primary">Send</button>
-            </form>
-          </div>
+          <p style="color: white;">상 호 : 금강산수 | 대 표 자 : 홍명식  |  도 로 명  주 소  :  서 울 특 별 시  동 대 문 구  이 문 로 길  4 6 - 4 0<br>T E L  :  0 1 0 - 2 4 4 2 - 1 3 6 5  |  E m a i l  :  h o n g 1 4 0 0 @ n a t e . c o m</p>
         </div>
       </div>
       <div class="gtco-copyright">
         <div class="gtco-container">
           <div class="row">
             <div class="col-md-6 text-left">
-              <p><small>&copy; 2016 Free HTML5. All Rights Reserved. </small></p>
+              <p><small>&copy; 2018 금강산수. All Rights Reserved. </small></p>
             </div>
+
             <div class="col-md-6 text-right">
               <p><small>Designed by <a href="http://gettemplates.co/" target="_blank">GetTemplates.co</a> Demo Images: <a href="http://pixeden.com/" target="_blank">Pixeden</a> &amp; <a href="http://unsplash.com" target="_blank">Unsplash</a></small> </p>
             </div>
@@ -183,6 +325,6 @@
   <script src='{% static "js/owl.carousel.min.js"%}'></script>
   <!-- Main -->
   <script src='{% static "js/main.js"%}'></script>
-
+ 
   </body>
 </html>
