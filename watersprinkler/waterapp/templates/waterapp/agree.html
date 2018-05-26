@@ -1,0 +1,191 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+<!--
+	Aesthetic by gettemplates.co
+	Twitter: http://twitter.com/gettemplateco
+	URL: http://gettemplates.co
+-->
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>금수강산(용수공급 도로살수)</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Free HTML5 Website Template by gettemplates.co" />
+	<meta name="keywords" content="free website templates, free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive" />
+	<meta name="author" content="gettemplates.co" />
+
+  	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<link href="https://fonts.googleapis.com/css?family=Merriweather:300,400|Montserrat:400,700" rel="stylesheet">
+	
+<!-- Animate.css -->
+	<link rel='{% static "stylesheet" href="css/animate.css" %}'>
+	<!-- Icomoon Icon Fonts-->
+	<link rel='{% static "stylesheet" href="css/icomoon.css" %}'>
+	<!-- Themify Icons-->
+	<link rel='{% static "stylesheet" href="css/themify-icons.css" %}'>
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href='{% static "css/bootstrap.css" %}'>
+
+	<!-- Owl Carousel  -->
+	<link rel="stylesheet" href='{% static "css/owl.carousel.min.css" %}'>
+	<link rel="stylesheet" href='{% static "css/owl.theme.default.min.css" %}'>
+
+	<!-- Theme style  -->
+	<link rel="stylesheet" href='{% static "css/style.css" %}'>
+
+	<!-- Modernizr JS -->
+	<script src='{% static "js/modernizr-2.6.2.min.js"%} '></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+	<script type="text/javascript">
+		function checks(Join){	
+	        var chk1=document.frmJoin.chk_info1.checked;
+	        var chk2=document.frmJoin.chk_info2.checked;
+
+        	 	if(!chk1){
+	            	alert('이용약관에 동의해 주세요');
+	            	return false;
+		        } 
+		        if(!chk2) {
+		            alert('개인정보취급방침에 동의해 주세요');
+		            return false;
+		        }
+
+		}
+	</script>>
+	</head>
+	<body>
+		
+	<div class="gtco-loader"></div>
+	
+	<div id="page">
+
+		<nav class="gtco-nav" role="navigation">
+			<div class="gtco-container">
+				
+				<div class="row">
+					<div class="col-sm-2 col-xs-12">
+						<div id="gtco-logo"><a href="/"><img src='{% static "images/mark.jpeg"%}'></a></div>
+					</div>
+					<div class="col-xs-10 text-right menu-1">
+						<ul>
+							<li><a href="/introduce">회사 소개</a></li>
+							<li><a href="/about">주요 업무</a></li>
+							<li><a href='{% url "waterapp:services"%}'>현장 갤러리</a></li>
+							{% if user.is_authenticated %}
+       						<li><a href='{% url "waterapp:post_list"%}'>구인. 구직</a></li>
+							<li><a href='{% url "waterapp:post1_list"%}'>팝니다. 삽니다</a></li>
+							<li><a href='{% url "waterapp:post2_list"%}'>블랙리스트</a></li>
+      						{% else %}
+      						{% endif %}
+						</ul>
+					</div>
+				</div>
+				
+			</div>
+		</nav>
+<div style="float: right;padding-right: 170px">
+	
+      {% if user.is_authenticated %}
+        {{ user.username }}님 환영합니다!!   <a href="{% url 'waterapp:logout' %}">로그아웃</a>
+      {% else %}
+        <a href="{% url 'login' %}">로그인</a> / <a href="{% url 'waterapp:agree' %}">회원가입</a>
+      {% endif %}
+   
+	</div>
+		<div class="gtco-section">
+			<div class="gtco-container">
+				<div class="row gtco-heading">
+					<div class="col-md-7">
+						<h2>회원가입</h2>
+					</div>
+				</div>
+				<form action='{% url "waterapp:signup" %}' name="frmJoin" onSubmit="return checks(this)">
+				{% for tos in toss %}
+				<div class="row">
+					<h3>금수강산 이용약관</h3>
+					<div class ="ha"  style="overflow:scroll; height:150px; font-size: 14px;">
+					<p style="color:black">{{tos.use}}
+							</p>
+					</div>
+					<br>
+					<input type="checkbox" name="chk_info1" id = "chk_info1">이용약관에 동의합니다.
+					<br>
+					<br>
+					<br>
+					<h3>금수강산 개인정보취급방침</h3>
+					<div class ="ha"  style="overflow:scroll; height:150px;  font-size: 14px;">
+						<p style="color:black">{{tos.infor}}</p>
+					</div>
+					<input type="checkbox" name="chk_info2" id = "chk_info2">개인정보취급방침에 동의합니다.
+				</div>
+				<p align="right">
+				<button class = "btn" type = "submit">다음으로</button>
+				<p>
+				{% endfor %}
+			</form>
+			</div>
+		</div>
+		<!-- END Contact -->
+ <footer id="gtco-footer" class="gtco-section" role="contentinfo">
+      <div class="gtco-container">
+        <div class="row row-pb-md">
+          <div class="col-md-4 gtco-widget gtco-footer-paragraph">
+            <h2 style="color: white">금수강산</h2>
+            
+          </div>
+          <p style="color: white;">상 호 : 금강산수 | 대 표 자 : 홍명식  |  도 로 명  주 소  :  서 울 특 별 시  동 대 문 구  이 문 로 길  4 6 - 4 0<br>T E L  :  0 1 0 - 2 4 4 2 - 1 3 6 5  |  E m a i l  :  h o n g 1 4 0 0 @ n a t e . c o m</p>
+        </div>
+      </div>
+      <div class="gtco-copyright">
+        <div class="gtco-container">
+          <div class="row">
+            <div class="col-md-6 text-left">
+              <p><small>&copy; 2018 금강산수. All Rights Reserved. </small></p>
+            </div>
+
+            <div class="col-md-6 text-right">
+              <p><small>Designed by <a href="http://gettemplates.co/" target="_blank">GetTemplates.co</a> Demo Images: <a href="http://pixeden.com/" target="_blank">Pixeden</a> &amp; <a href="http://unsplash.com" target="_blank">Unsplash</a></small> </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+	</div>
+
+	<div class="gototop js-top">
+		<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
+	</div>
+	
+	<!-- jQuery -->
+	<script src='{% static "js/jquery.min.js"%}'></script>
+	<!-- jQuery Easing -->
+	<script src='{% static "js/jquery.easing.1.3.js"%}'></script>
+	<!-- Bootstrap -->
+	<script src='{% static "js/bootstrap.min.js"%}'></script>
+	<!-- Waypoints -->
+	<script src='{% static "js/jquery.waypoints.min.js"%}'></script>
+	<!-- Carousel -->
+	<script src='{% static "js/owl.carousel.min.js"%}'></script>
+
+
+	<script src='{% static "js/google_map.js"%}'></script>
+
+		<!-- Main -->
+	<script src='{% static "js/main.js"%}'></script>
+
+	</body>
+</html>
