@@ -38,8 +38,8 @@ urlpatterns = [
     path(r'activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/', views.activate, name = 'activate'),
     path(r'duplcheck', views.DuplicationCheck.as_view(), name='duplcheck'),
     path(r'password/', views.change_password, name='change_password'),
-    path(r'password_reset/', auth_views.password_reset,{'template_name': 'waterapp/password_reset_form.html'} ,name='password_reset'),
-    path(r'password_reset/done/',  auth_views.password_reset_done,{'template_name': 'waterapp/password_reset_done.html'},name='password_reset_done'),
-    path(r'reset/<uidb64>/<token>/', auth_views.password_reset_confirm,{'template_name': 'waterapp/password_reset_confirm.html'} ,name='password_reset_confirm'),
-    path(r'reset/done/',auth_views.password_reset_complete,{'template_name': 'waterapp/password_reset_complete.html'} , name='password_reset_complete')
+    path(r'password_reset/', views.PasswordResetView.as_view(),{'post_reset_redirect': '/password_reset/done/'} ,name='password_reset'),
+    path(r'password_reset/done/',  views.password_reset_done,name='password_reset_done'),
+    path(r'reset/<uidb64>/<token>/', views.PasswordResetConfirmView.as_view() ,name='password_reset_confirm'),
+    path(r'reset/done/',views.password_reset_complete , name='password_reset_complete')
 ]
